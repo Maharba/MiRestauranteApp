@@ -12,6 +12,18 @@ namespace MiRestauranteApp
         public MainPage()
         {
             InitializeComponent();
+
+            
+
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var azureService = new AzureServiceManager();
+            var platillos = await azureService.ObtenerPlatillos();
+            lstPlatillos.ItemsSource = platillos;
         }
     }
 }

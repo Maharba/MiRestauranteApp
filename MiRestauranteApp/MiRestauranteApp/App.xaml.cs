@@ -13,12 +13,14 @@ namespace MiRestauranteApp
         {
             InitializeComponent();
 
-            MainPage = new MiRestauranteApp.MainPage();
+            MainPage = new NavigationPage(new MainPage());
         }
 
-        protected override void OnStart()
+        protected override async void OnStart()
         {
             // Handle when your app starts
+
+            
         }
 
         protected override void OnSleep()
