@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
+using MiRestauranteApp.Models;
 using Plugin.Connectivity;
 
 namespace MiRestauranteApp
@@ -16,11 +17,12 @@ namespace MiRestauranteApp
         public MobileServiceClient ServiceClient { get; set; }
 
         private IMobileServiceSyncTable<Platillo> _tablaPlatillo;
+        private IMobileServiceSyncTable<Categoria> _tablaCategoria;
         private bool _isInitilized;
 
         private readonly string AzureURL = "http://mirestaurante-app.azurewebsites.net";
 
-        private async Task Initialize()
+        public  async Task Initialize()
         {
             if (ServiceClient?.SyncContext?.IsInitialized ?? false)
                 return;
@@ -32,10 +34,12 @@ namespace MiRestauranteApp
 
             var store = new MobileServiceSQLiteStore(path);
             store.DefineTable<Platillo>();
+            store.DefineTable<Categoria>();
 
             await ServiceClient.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler());
 
             _tablaPlatillo = ServiceClient.GetSyncTable<Platillo>();
+            _tablaCategoria = ServiceClient.GetSyncTable<Categoria>();
         }
 
         private async Task SyncPlatillos()
@@ -69,6 +73,39 @@ namespace MiRestauranteApp
             await _tablaPlatillo.InsertAsync(platillo);
 
             await SyncPlatillos();
+        }
+
+        private async Task SyncCategorias()
+        {
+            if (CrossConnectivity.Current.IsConnected && await CrossConnectivity.Current.IsRemoteReachable(AzureURL))
+            {
+                try
+                {
+                    await ServiceClient.SyncContext.PushAsync();
+                    await _tablaPlatillo.PullAsync("categorias", _tablaCategoria.CreateQuery());
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
+
+        public async Task<List<Categoria>> ObtenerCategorias()
+        {
+            await Initialize();
+            await SyncCategorias();
+            return await _tablaCategoria.ToListAsync();
+        }
+
+        public async Task AgregarCategoria(Categoria categoria)
+        {
+            await Initialize();
+
+            await _tablaCategoria.InsertAsync(categoria);
+
+            await SyncCategorias();
         }
     }
 }

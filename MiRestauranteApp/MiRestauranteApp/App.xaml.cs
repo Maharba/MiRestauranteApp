@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Microsoft.WindowsAzure.MobileServices;
+using MiRestauranteApp.Interfaces;
+using MiRestauranteApp.Pages;
 using Xamarin.Forms;
 
 namespace MiRestauranteApp
@@ -13,7 +15,8 @@ namespace MiRestauranteApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MobileService = new AzureServiceManager();
+            MainPage = new IntroPage();
         }
 
         protected override async void OnStart()
@@ -31,6 +34,14 @@ namespace MiRestauranteApp
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+
+        public static AzureServiceManager MobileService;
+        public static IAuthenticate Authenticator { get; set; }
+
+        public static void Init(IAuthenticate authenticator)
+        {
+            Authenticator = authenticator;
         }
     }
 }

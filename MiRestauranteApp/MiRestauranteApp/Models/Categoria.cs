@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiRestauranteApp
+namespace MiRestauranteApp.Models
 {
-    public class Platillo : AzureBase
+    public class Categoria : AzureBase
     {
         public string Nombre { get; set; }
         public string Descripcion { get; set; }

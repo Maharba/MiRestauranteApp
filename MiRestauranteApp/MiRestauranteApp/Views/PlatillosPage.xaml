@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MiRestauranteApp.Views.PlatillosPage"
+             xmlns:sfLstView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             xmlns:local="clr-namespace:MiRestauranteApp.ViewModels;assembly=MiRestauranteApp">
+  <ListView x:Name="lstPlatillos" RowHeight="125" SeparatorVisibility="None">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <ViewCell>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition></RowDefinition>
+              <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition></ColumnDefinition>
+              <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+          </Grid>
+        </ViewCell>
+        <ImageCell ImageSource="{Binding Imagen}" Text="{Binding Nombre}" Detail="{Binding Descripcion}"></ImageCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+</ContentPage>
