@@ -66,6 +66,13 @@ namespace MiRestauranteApp
             return await _tablaPlatillo.ToListAsync();
         }
 
+        public async Task<List<Platillo>> ObtenerPlatillosPorCategoria(string categoria)
+        {
+            await Initialize();
+            await SyncPlatillos();
+            return await _tablaPlatillo.Where(p => p.Categoria == categoria).ToListAsync();
+        }
+
         public async Task AgregarPlatillo(Platillo platillo)
         {
             await Initialize();
